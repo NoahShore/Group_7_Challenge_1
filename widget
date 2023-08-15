@@ -3,33 +3,23 @@
   {
    "cell_type": "code",
    "execution_count": 1,
-   "id": "4adf8939",
+   "id": "fd87a87e",
    "metadata": {},
    "outputs": [],
    "source": [
+    "#Dependencies and Set Up\n",
     "import pandas as pd\n",
-    "import numpy as np"
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import scipy.stats as st\n",
+    "from scipy.stats import linregress\n",
+    "import seaborn as sns  # For heatmap visualization"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 2,
-   "id": "db0e1dee",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "import matplotlib.pyplot as plt\n",
-    "import pandas as pd\n",
-    "import scipy.stats as st\n",
-    "from scipy.stats import linregress"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 3,
-   "id": "107b3f93",
+   "id": "aa11efae",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -38,1832 +28,210 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
-   "id": "d92a61f0",
+   "execution_count": 3,
+   "id": "a0c90111",
    "metadata": {},
    "outputs": [],
    "source": [
-    "rent_file = pd.read_csv(\"price.csv\")"
+    "#Creating a path to the file making it into a dataframe\n",
+    "rent_file = pd.read_csv(\"Raw_Price_Data//price.csv\")\n",
+    "\n",
+    "rent_df = pd.DataFrame(rent_file)\n",
+    "\n",
+    "rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "e46fe89a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Identifying what columns are missing data\n",
+    "clean_rent_df = rent_df.dropna(how = 'any')\n",
+    "\n",
+    "clean_rent_df.head()"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 5,
-   "id": "41c34c5b",
+   "id": "4d23dd45",
    "metadata": {},
    "outputs": [],
    "source": [
-    "rent_file = pd.read_csv(\"price.csv\")\n",
+    "#Extracting states from data (CA, IL, NY, TX)\n",
+    "four_states = [\"NY\", \"CA\", \"IL\", \"TX\"]\n",
     "\n",
-    "rent_pd = pd.DataFrame(rent_file)\n",
+    "four_states_df = rent_df[rent_df['State'].isin(four_states)]\n",
     "\n",
-    "rent_pd.head()"
+    "four_states_df.head(20)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 6,
-   "id": "5db517e1",
+   "id": "28d8598b",
    "metadata": {},
    "outputs": [],
    "source": [
-    "#Creating a path to the file and hjhjhmaking it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
+    "#Droping all NaN values\n",
+    "rent_df.dropna(inplace = True)\n",
     "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
+    "#Display the DataFrame\n",
     "rent_df.head()"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 7,
-   "id": "8e2aa883",
+   "id": "a60f8f83",
    "metadata": {},
    "outputs": [],
    "source": [
-    "rent_df.isna().sum()"
+    "#New York Data Frame\n",
+    "NY_state = [\"NY\"]\n",
+    "\n",
+    "NY_state_df = rent_df[rent_df['State'].isin(NY_state)]\n",
+    "\n",
+    "NY_state_df.head(20)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 8,
-   "id": "3189d883",
+   "id": "b2dbd41f",
    "metadata": {},
    "outputs": [],
    "source": [
-    "%notebook widget"
+    "#California Data Frame\n",
+    "CA_state = [\"CA\"]\n",
+    "\n",
+    "CA_state_df = rent_df[rent_df['State'].isin(CA_state)]\n",
+    "\n",
+    "CA_state_df.head(20)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 9,
-   "id": "a54f507d",
+   "id": "03998b17",
    "metadata": {},
    "outputs": [],
    "source": [
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "import matplotlib.pyplot as plt\n",
-    "import pandas as pd\n",
-    "import scipy.stats as st\n",
-    "from scipy.stats import linregress"
+    "#Illinois Data Frame\n",
+    "IL_state = [\"IL\"]\n",
+    "\n",
+    "IL_state_df = rent_df[rent_df['State'].isin(IL_state)]\n",
+    "\n",
+    "IL_state_df.head(20)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 10,
-   "id": "0fa50ccd",
+   "id": "b483f591",
    "metadata": {},
    "outputs": [],
    "source": [
-    "%notebook widget"
+    "#Texas Data Frame\n",
+    "TX_state = [\"TX\"]\n",
+    "\n",
+    "TX_state_df = rent_df[rent_df['State'].isin(TX_state)]\n",
+    "\n",
+    "TX_state_df.head(20)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 11,
-   "id": "f1881b78",
+   "id": "27283ea1",
    "metadata": {},
    "outputs": [],
    "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()"
+    "#Making all of the columsn into a list\n",
+    "columns_list = ['January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016']"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 12,
-   "id": "23fe0752",
+   "id": "b4a58e54",
    "metadata": {},
    "outputs": [],
    "source": [
-    "rent_df.isna().sum()"
+    "# US median rent prices\n",
+    "US_med_list = []\n",
+    "\n",
+    "for i in columns_list:\n",
+    "\n",
+    "    US_med_rent = np.median(clean_rent_df[i])\n",
+    "\n",
+    "    US_med_list.append(US_med_rent)\n",
+    "\n",
+    "print(US_med_list)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 13,
-   "id": "a62aef0d",
+   "id": "7d4f1e56",
    "metadata": {},
    "outputs": [],
    "source": [
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "import matplotlib.pyplot as plt\n",
-    "import pandas as pd\n",
-    "import scipy.stats as st\n",
-    "from scipy.stats import linregress"
+    "US_med_df = pd.DataFrame(US_med_list, columns_list).T \n",
+    "\n",
+    "US_med_df.head()"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 14,
-   "id": "1d7604fa",
+   "id": "8610227b",
    "metadata": {},
    "outputs": [],
    "source": [
-    "%notebook widget"
+    "# For loop to calculate the median value of each column in IL\n",
+    "IL_med_list = []\n",
+    "\n",
+    "for i in columns_list:\n",
+    "\n",
+    "    IL_med_rent = np.median(IL_state_df[i])\n",
+    "\n",
+    "    IL_med_list.append(IL_med_rent)\n",
+    "\n",
+    "print(IL_med_list)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 15,
-   "id": "f3d6326b",
+   "id": "e74141d6",
    "metadata": {},
    "outputs": [],
    "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
+    "# Putting IL med rent prices for each month and year into a DF\n",
+    "IL_med_df = pd.DataFrame(IL_med_list, columns_list).T \n",
     "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()"
+    "IL_med_df.head()"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 16,
-   "id": "570a2410",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "import matplotlib.pyplot as plt\n",
-    "import pandas as pd\n",
-    "import scipy.stats as st\n",
-    "from scipy.stats import linregress"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 17,
-   "id": "54ae017b",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "%notebook widget"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 18,
-   "id": "20bb4b3a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 19,
-   "id": "69ee02c2",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()10"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 20,
-   "id": "4c19f11d",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "import matplotlib.pyplot as plt\n",
-    "import pandas as pd\n",
-    "import scipy.stats as st\n",
-    "from scipy.stats import linregress"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 21,
-   "id": "f07f7c3d",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "%notebook widget"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 22,
-   "id": "d77ce4b8",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()10"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 23,
-   "id": "24aacf73",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 24,
-   "id": "37a32b2f",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()10"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 25,
-   "id": "6a54f672",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 26,
-   "id": "cbb0dad5",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states_df = rent_df.drop(rent_df[rent_df['State'] != \"New York\" or \"California\" or \"Illinois\" or \"Texas\"])\n",
-    "\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 27,
-   "id": "236c299b",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states_df = rent_df.drop(rent_df[rent_df['State'] != \"New York\"])\n",
-    "\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 28,
-   "id": "22f680cb",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states_df = rent_df.drop(rent_df.iloc[rent_df['State'] != \"New York\"])\n",
-    "\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 29,
-   "id": "e8996ccc",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states_df = rent_df.iloc(rent_df[rent_df['State'] != \"New York\"])\n",
-    "\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 30,
-   "id": "815d8eb7",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states_df = rent_df.loc(rent_df[rent_df['State'] != \"New York\"])\n",
-    "\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 31,
-   "id": "78a634a0",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states_df = rent_df.drop(rent_df[rent_df['State'] != \"New York\"])\n",
-    "\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 32,
-   "id": "aba0b8b2",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states_df = rent_df.drop(rent_df[rent_df['State'] != \"NY\"])\n",
-    "\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 33,
-   "id": "3d885bac",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# Example assuming the 'Location_State' column exists\n",
-    "four_states_df = rent_df.drop(rent_df[rent_df['Location_State'] != \"New York\"])"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 34,
-   "id": "41a68344",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# Example assuming the 'Location_State' column exists\n",
-    "new_york_df = rent_df[rent_df['State'] == 'New York']"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 35,
-   "id": "b4346325",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# Example assuming the 'Location_State' column exists\n",
-    "new_york_df = rent_df[rent_df['State'] == 'New York']\n",
-    "new_york_df"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 36,
-   "id": "7fc2c4ab",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# Example assuming the 'Location_State' column exists\n",
-    "new_york_df = rent_df[rent_df['State'] == 'New York']\n",
-    "new_york_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 37,
-   "id": "b9583ed0",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "\n",
-    "# Load your DataFrame (replace 'your_data.csv' with your actual data file)\n",
-    "rent_df = pd.read_csv('your_data.csv')\n",
-    "\n",
-    "# List of column names to drop\n",
-    "columns_to_drop = ['City Code', 'City', 'Metro', 'County']\n",
-    "\n",
-    "# Drop the specified columns\n",
-    "filtered_df = rent_df.drop(columns=columns_to_drop)\n",
-    "\n",
-    "# Display the first few rows of the filtered DataFrame\n",
-    "print(filtered_df.head())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 38,
-   "id": "e56f98d4",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "\n",
-    "# Load your DataFrame (replace 'your_data.csv' with your actual data file)\n",
-    "rent_df = pd.read_csv('price.csv')\n",
-    "\n",
-    "# List of column names to drop\n",
-    "columns_to_drop = ['City Code', 'City', 'Metro', 'County']\n",
-    "\n",
-    "# Drop the specified columns\n",
-    "filtered_df = rent_df.drop(columns=columns_to_drop)\n",
-    "\n",
-    "# Display the first few rows of the filtered DataFrame\n",
-    "print(filtered_df.head())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 39,
-   "id": "7850f92f",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states = [\"NY\", \"CA\", \"IL\", \"TX\"]\n",
-    "\n",
-    "four_states_df = rent_df.isin(rent_df[rent_df[four_states]])\n",
-    "\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 40,
-   "id": "34a587e8",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "\n",
-    "# Load your DataFrame (replace 'your_data.csv' with your actual data file)\n",
-    "rent_df = pd.read_csv('price.csv')\n",
-    "\n",
-    "# List of column names to drop\n",
-    "columns_to_drop = []\n",
-    "\n",
-    "# Drop the specified columns\n",
-    "filtered_df = rent_df.drop(columns=columns_to_drop)\n",
-    "\n",
-    "# Display the first few rows of the filtered DataFrame\n",
-    "print(filtered_df.head())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 41,
-   "id": "d33e4bef",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "\n",
-    "# Load your DataFrame (replace 'your_data.csv' with your actual data file)\n",
-    "rent_df = pd.read_csv('price.csv')\n",
-    "\n",
-    "# List of column names to drop\n",
-    "columns_to_drop\n",
-    "\n",
-    "# Drop the specified columns\n",
-    "filtered_df = rent_df.drop(columns=columns_to_drop)\n",
-    "\n",
-    "# Display the first few rows of the filtered DataFrame\n",
-    "print(filtered_df.head())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 42,
-   "id": "a1a3e829",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states = [\"NY\", \"CA\", \"IL\", \"TX\"]\n",
-    "\n",
-    "four_states_df = rent_df[rent_df['State'].isin(four_states)]\n",
-    "# clean=df[df['Mouse ID']!='g989']\n",
-    "four_states_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 43,
-   "id": "a43bca15",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "import matplotlib.pyplot as plt\n",
-    "import pandas as pd\n",
-    "import scipy.stats as st\n",
-    "from scipy.stats import linregress"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 44,
-   "id": "3667c645",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "%notebook widget"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 45,
-   "id": "3440d834",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 46,
-   "id": "6f98d763",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Identifying what columns are missing data\n",
-    "rent_df.isna().sum()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 47,
-   "id": "950d6610",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states = [\"NY\", \"CA\", \"IL\", \"TX\"]\n",
-    "\n",
-    "four_states_df = rent_df[rent_df['State'].isin(four_states)]\n",
-    "\n",
-    "four_states_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 48,
-   "id": "954fa164",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "\n",
-    "# Load your DataFrame (replace 'your_data.csv' with your actual data file)\n",
-    "rent_df = pd.read_csv('price.csv')\n",
-    "\n",
-    "# List of column names to drop\n",
-    "columns_to_drop\n",
-    "\n",
-    "# Drop the specified columns\n",
-    "filtered_df = rent_df.drop(columns=columns_to_drop)\n",
-    "\n",
-    "# Display the first few rows of the filtered DataFrame\n",
-    "print(filtered_df.head())"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 49,
-   "id": "0621954a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "NY_states = [\"NY\"]\n",
-    "\n",
-    "NY_states_df = rent_df[rent_df['State'].isin(NY_states)]\n",
-    "\n",
-    "NY_states_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 50,
-   "id": "de89fb6a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "NY_states = [\"NY\"]\n",
-    "\n",
-    "NY_states_df = rent_df[rent_df['State'].isin['NY']]\n",
-    "\n",
-    "NY_states_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 51,
-   "id": "b408b18c",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "NY_states = [\"NY\"]\n",
-    "\n",
-    "NY_states_df = rent_df[rent_df['State'].isin[\"NY\"]]\n",
-    "\n",
-    "NY_states_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 52,
-   "id": "62d04563",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "NY_states = [\"NY\"]\n",
-    "\n",
-    "NY_states_df = rent_df[rent_df['State'].isin[NY_state]]\n",
-    "\n",
-    "NY_states_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 53,
-   "id": "10b351bd",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "NY_states = [\"NY\"]\n",
-    "\n",
-    "NY_states_df = rent_df[rent_df['State'].isin[NY_state]\n",
-    "NY_states_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 54,
-   "id": "32c35b87",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "\n",
-    "NY_states = [\"NY\"]\n",
-    "\n",
-    "NY_states_df = rent_df[rent_df['State'].isin(NY_states)]\n",
-    "\n",
-    "NY_states_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 55,
-   "id": "03036935",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "\n",
-    "NY_state = [\"NY\"]\n",
-    "\n",
-    "NY_state_df = rent_df[rent_df['State'].isin(NY_state)]\n",
-    "\n",
-    "NY_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 56,
-   "id": "c42123d6",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Breaking each state into its own df\n",
-    "rent_df.dropna()\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 57,
-   "id": "e948803c",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "CA_state = [\"CA\"]\n",
-    "\n",
-    "CA_state_df = rent_df[rent_df['State'].isin(CA_state)]\n",
-    "\n",
-    "CA_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 58,
-   "id": "6e9829ce",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "IL_state = [\"IL\"]\n",
-    "\n",
-    "IL_state_df = rent_df[rent_df['State'].isin(IL_state)]\n",
-    "\n",
-    "IL_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 59,
-   "id": "385e5486",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Breaking each state into its own df\n",
-    "rent_df.dropna(how='all')\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 60,
-   "id": "65c27f2c",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "TX_state = [\"TX\"]\n",
-    "\n",
-    "TX_state_df = rent_df[rent_df['State'].isin(TX_state)]\n",
-    "\n",
-    "TX_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 61,
-   "id": "691a983e",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Breaking each state into its own df\n",
-    "rent_df.dropna(inplace = True)\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 62,
-   "id": "52214e64",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Droping all NaN values\n",
-    "rent_df.dropna(inplace = True)\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 63,
-   "id": "adfe8361",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Data Frame\n",
-    "NY_state = [\"NY\"]\n",
-    "\n",
-    "NY_state_df = rent_df[rent_df['State'].isin(NY_state)]\n",
-    "\n",
-    "NY_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 64,
-   "id": "655f813d",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#California Data Frame\n",
-    "CA_state = [\"CA\"]\n",
-    "\n",
-    "CA_state_df = rent_df[rent_df['State'].isin(CA_state)]\n",
-    "\n",
-    "CA_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 65,
-   "id": "41e411a8",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Illinois Data Frame\n",
-    "IL_state = [\"IL\"]\n",
-    "\n",
-    "IL_state_df = rent_df[rent_df['State'].isin(IL_state)]\n",
-    "\n",
-    "IL_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 66,
-   "id": "a22a26da",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Texas Data Frame\n",
-    "TX_state = [\"TX\"]\n",
-    "\n",
-    "TX_state_df = rent_df[rent_df['State'].isin(TX_state)]\n",
-    "\n",
-    "TX_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 67,
-   "id": "d17769c8",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "import numpy as np\n",
-    "import matplotlib.pyplot as plt\n",
-    "import pandas as pd\n",
-    "import scipy.stats as st\n",
-    "from scipy.stats import linregress"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 68,
-   "id": "5408eb73",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "%notebook widget"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 69,
-   "id": "82810493",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Creating a path to the file making it into a dataframe\n",
-    "rent_file = pd.read_csv(\"price.csv\")\n",
-    "\n",
-    "rent_df = pd.DataFrame(rent_file)\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 70,
-   "id": "ad32d10e",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Identifying what columns are missing data\n",
-    "rent_df.isna().sum()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 71,
-   "id": "23f5d789",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Extracting states from data (CA, IL, NY, TX)\n",
-    "four_states = [\"NY\", \"CA\", \"IL\", \"TX\"]\n",
-    "\n",
-    "four_states_df = rent_df[rent_df['State'].isin(four_states)]\n",
-    "\n",
-    "four_states_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 72,
-   "id": "296f595f",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Droping all NaN values\n",
-    "rent_df.dropna(inplace = True)\n",
-    "\n",
-    "rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 73,
-   "id": "8b53d1b9",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Data Frame\n",
-    "NY_state = [\"NY\"]\n",
-    "\n",
-    "NY_state_df = rent_df[rent_df['State'].isin(NY_state)]\n",
-    "\n",
-    "NY_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 74,
-   "id": "a607b0d4",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#California Data Frame\n",
-    "CA_state = [\"CA\"]\n",
-    "\n",
-    "CA_state_df = rent_df[rent_df['State'].isin(CA_state)]\n",
-    "\n",
-    "CA_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 75,
-   "id": "a19935d3",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Illinois Data Frame\n",
-    "IL_state = [\"IL\"]\n",
-    "\n",
-    "IL_state_df = rent_df[rent_df['State'].isin(IL_state)]\n",
-    "\n",
-    "IL_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 76,
-   "id": "947f8731",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Texas Data Frame\n",
-    "TX_state = [\"TX\"]\n",
-    "\n",
-    "TX_state_df = rent_df[rent_df['State'].isin(TX_state)]\n",
-    "\n",
-    "TX_state_df.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 77,
-   "id": "c4ac1789",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "data = {\n",
-    "    'Column1': [3, 5, 1, 9, 2],\n",
-    "    'Column2': [7, 2, 8, 4, 6],\n",
-    "    'Column3': [0, 2, 1, 4, 3]\n",
-    "}\n",
-    "df = TX_state_df(data)\n",
-    "\n",
-    "# Find the minimum and maximum values in the DataFrame\n",
-    "min_values = df.min()\n",
-    "max_values = df.max()\n",
-    "\n",
-    "print(\"Minimum values:\")\n",
-    "print(min_values)\n",
-    "\n",
-    "print(\"\\nMaximum values:\")\n",
-    "print(max_values)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 78,
-   "id": "004addbb",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "data = {\n",
-    "    'Column1': [3, 5, 1, 9, 2],\n",
-    "    'Column2': [7, 2, 8, 4, 6],\n",
-    "    'Column3': [0, 2, 1, 4, 3]\n",
-    "}\n",
-    "X_state_df(data)\n",
-    "\n",
-    "# Find the minimum and maximum values in the DataFrame\n",
-    "min_values = df.min()\n",
-    "max_values = df.max()\n",
-    "\n",
-    "print(\"Minimum values:\")\n",
-    "print(min_values)\n",
-    "\n",
-    "print(\"\\nMaximum values:\")\n",
-    "print(max_values)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 79,
-   "id": "27923e88",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "tx_min = TX_state_df['November 2010'].min()\n",
-    "\n",
-    "print(tx_min)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 80,
-   "id": "455f01ad",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "rent_df['Date'] = pd.to_datetime(rent_df.iloc[:, 1:3].assign(DAY=1))\n",
-    "\n",
-    "# Filtering the DataFrame for Texas (you can skip this part if you have your TX_state_df already)\n",
-    "TX_state = [\"TX\"]\n",
-    "TX_state_df = NY_state_df[rent_df['State'].isin(TX_state)]\n",
-    "\n",
-    "# Find the minimum and maximum values in the 'Date' column\n",
-    "min_date = TX_state_df['Date'].min()\n",
-    "max_date = TX_state_df['Date'].max()\n",
-    "\n",
-    "print(\"Minimum Date:\", min_date)\n",
-    "print(\"Maximum Date:\", max_date)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 81,
-   "id": "6433d538",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Califonia Combined Median Rents\n",
-    "\n",
-    "nov_2010_med_rent = "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 82,
-   "id": "6d53d35f",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "nov_2010_med_rent = NY_state_df[\"November 2010\"].median"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 83,
-   "id": "9145f968",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Califonia Combined Median Rents\n",
-    "\n",
-    "nov_2010_med_rent = CA_state_df[\"November 2010\"].median\n",
-    "\n",
-    "print(nov_2010_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 84,
-   "id": "4c581fd3",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "print(NY_nov_2010_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 85,
-   "id": "c4d15d91",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#TX\n",
-    "#Finding the median for all TX rent prices per month/year\n",
-    "\n",
-    "nov_2010_med_rent = TX_state_df[\"November 2010\"].median\n",
-    "nov_2010_med_rent "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 86,
-   "id": "6f017f84",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#TX\n",
-    "#Finding the median for all TX rent prices per month/year\n",
-    "\n",
-    "TX_nov_2010_med_rent = TX_state_df[\"November 2010\"].median\n",
-    "TX_nov_2010_med_rent "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 87,
-   "id": "78c0c457",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "print(NY_nov_2010_med_rent)\n",
-    "NY_nov_2010_med_rent.head"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 88,
-   "id": "887dcdc7",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#TX\n",
-    "#Finding the median for all TX rent prices per month/year\n",
-    "\n",
-    "TX_nov_2010_med_rent = TX_state_df[\"November 2010\"].median\n",
-    "print(TX_nov_2010_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 89,
-   "id": "dc871bc2",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "#print(NY_nov_2010_med_rent)\n",
-    "NY_nov_2010_med_rent.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 90,
-   "id": "482ef6b5",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Califonia Combined Median Rents\n",
-    "\n",
-    "CA_nov_2010_med_rent = stats.median(CA_state_df[\"November 2010\"])\n",
-    "\n",
-    "print(CA_nov_2010_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 91,
-   "id": "cb2eebc7",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "IL_median = IL_state.median(axis = 1)\n",
-    "IL_median"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 92,
-   "id": "d88a93cd",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "#print(NY_nov_2010_med_rent)\n",
-    "NY_nov_2010_med_rent_df"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 93,
-   "id": "5d6b42d6",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "#print(NY_nov_2010_med_rent)\n",
-    "NY_nov_2010_med_rent_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 94,
-   "id": "c612b84a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#TX\n",
-    "#Finding the median for all TX rent prices per month/year\n",
-    "\n",
-    "TX_nov_2010_med_rent = TX_state_df[\"November 2010\"].median\n",
-    "TX_nov_2010_med_rent.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 95,
-   "id": "9d8a12a6",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#TX\n",
-    "#Finding the median for all TX rent prices per month/year\n",
-    "\n",
-    "TX_nov_2010_med_rent = TX_state_df[\"November 2010\"].median\n",
-    "TX_nov_2010_med_rent.show()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 96,
-   "id": "e52cacd3",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "#print(NY_nov_2010_med_rent)\n",
-    "NY_nov_2010_med_rent"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 97,
-   "id": "12d0d96a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Califonia Combined Median Rents\n",
-    "\n",
-    "CA_nov_2010_med_rent = st.median(CA_state_df[\"November 2010\"])\n",
-    "\n",
-    "print(CA_nov_2010_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 98,
-   "id": "3fe23a3a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "NY_nov_2010_med_rent.columns"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 99,
-   "id": "b499d6e8",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "NY_nov_2010_med_rent.column"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 100,
-   "id": "55a8ff9b",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#TX\n",
-    "#Finding the median for all TX rent prices per month/year\n",
-    "\n",
-    "TX_nov_2010_med_rent = TX_state_df[\"November 2010\"].median\n",
-    "TX_nov_2010_med_rent.show(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 101,
-   "id": "8dd5ae10",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
-    "\n",
-    "NY_nov_2010_med_rent"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 102,
-   "id": "83e00739",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#TX\n",
-    "#Finding the median for all TX rent prices per month/year\n",
-    "\n",
-    "TX_nov_2010_med_rent = TX_state_df[\"November 2010\"].median\n",
-    "TX_nov_2010_med_rent.head(20)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 103,
-   "id": "a6650b2b",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Califonia Combined Median Rents\n",
-    "\n",
-    "CA_nov_2010_med_rent = np.median(CA_state_df[\"November 2010\"])\n",
-    "\n",
-    "print(CA_nov_2010_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 104,
-   "id": "23f633b5",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "\n",
-    "NY_state_df\n",
-    "\n",
-    "# Calculate and print the median for each column using a for loop\n",
-    "for column in NY_state_df:\n",
-    "    median_value = df[column].median()\n",
-    "    print(f\"Median of {column}: {median_value}\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 105,
-   "id": "5bf44583",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "\n",
-    "NY_state_df\n",
-    "\n",
-    "# Calculate and print the median for each column using a for loop\n",
-    "for column in NY_state_df:\n",
-    "    median_value = NY_state_df[column].median()\n",
-    "    print(f\"Median of {column}: {median_value}\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 106,
-   "id": "fdb40ae0",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "median_dict = {}\n",
-    "\n",
-    "for column in NY_state_df:\n",
-    "    median_value = df[column].median()\n",
-    "    median_dict[column] = median_value\n",
-    "\n",
-    "print(median_dict)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 107,
-   "id": "f7bffd77",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "median_dict = {}\n",
-    "\n",
-    "for column in NY_state_df:\n",
-    "    median_value = NY_state_df[column].median()\n",
-    "    median_dict[column] = median_value\n",
-    "\n",
-    "print(median_dict)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 108,
-   "id": "c8affb39",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# For loop to calculate the median value of each column\n",
-    "meadian_IL = []\n",
-    "\n",
-    "for column in columns:\n",
-    "    meadian_IL[column] = IL_state_df[column].median()\n",
-    "\n",
-    "print(meadian_IL)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 109,
-   "id": "0a09cb95",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# For loop to calculate the median value of each column\n",
-    "meadian_IL = []\n",
-    "\n",
-    "for column in columns:\n",
-    "    meadian_IL = IL_state_df[column].median()\n",
-    "\n",
-    "print(meadian_IL)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 110,
-   "id": "0f8d98aa",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "median_dict = {}\n",
-    "\n",
-    "for column in column:\n",
-    "    median_value = NY_state_df[column].median()\n",
-    "    median_dict[column] = median_value\n",
-    "\n",
-    "print(median_dict)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 111,
-   "id": "841931b9",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "median_dict = {}\n",
-    "\n",
-    "for column in columns:\n",
-    "    median_value = NY_state_df[column].median()\n",
-    "    median_dict[column] = median_value\n",
-    "\n",
-    "print(median_dict)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 112,
-   "id": "b6fc945b",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "\n",
-    "NY_state_df\n",
-    "\n",
-    "# Calculate and print the median for each column using a for loop\n",
-    "for column in NY_state_df:\n",
-    "    median_value = NY_state_df[column].median()\n",
-    "    print(f\"Median of {column}: {median_value}\")"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 113,
-   "id": "9a1f5d61",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "median_dict = {}\n",
-    "\n",
-    "for column in columns:\n",
-    "    median_value = NY_state_df[column].median()\n",
-    "    median_dict[column] = median_value\n",
-    "\n",
-    "print(median_dict)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 114,
-   "id": "3a6fc5df",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# For loop to calculate the median value of each column\n",
-    "meadian_IL = []\n",
-    "\n",
-    "for column in IL_state_df.columns:\n",
-    "    meadian_IL = IL_state_df[column].median()\n",
-    "\n",
-    "print(meadian_IL)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 115,
-   "id": "22916946",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# For loop to calculate the median value of each column\n",
-    "meadian_IL = []\n",
-    "\n",
-    "for column in IL_state_df.columns:\n",
-    "    meadian_IL[column] = IL_state_df[column].median()\n",
-    "\n",
-    "print(meadian_IL)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 116,
-   "id": "0d2d8f21",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "NY_state_df\n",
-    "\n",
-    "# Use iloc to select all columns\n",
-    "all_columns = NY_state_df.iloc[:, :]\n",
-    "\n",
-    "# Display the selected columns\n",
-    "print(all_columns)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 117,
-   "id": "703af751",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "NY_state_df\n",
-    "\n",
-    "\n",
-    "# Get all column names as a list\n",
-    "column_names_list = NY_state_df.tolist()\n",
-    "\n",
-    "# Display the column names list\n",
-    "print(column_names_list)\n",
-    "\n",
-    "# Create a dictionary where keys are column names and values are column data\n",
-    "columns_dict = {col: df[col] for col in df.columns}\n",
-    "\n",
-    "# Display the columns dictionary\n",
-    "print(columns_dict)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 118,
-   "id": "9c75d757",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Califonia Combined Median Rents\n",
-    "columns_list = ['November 2010','December 2010','January 2011',\n",
-    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
-    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
-    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
-    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
-    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
-    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
-    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
-    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
-    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
-    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
-    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']\n",
-    "\n",
-    "for i in columns_list\n",
-    "\n",
-    "CA_med_rent = np.median(CA_state_df[i])\n",
-    "\n",
-    "print(CA_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 119,
-   "id": "28625024",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Califonia Combined Median Rents\n",
-    "columns_list = ['November 2010','December 2010','January 2011',\n",
-    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
-    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
-    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
-    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
-    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
-    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
-    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
-    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
-    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
-    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
-    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']\n",
-    "\n",
-    "for i in columns_list:\n",
-    "\n",
-    "CA_med_rent = np.median(CA_state_df[i])\n",
-    "\n",
-    "print(CA_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 120,
-   "id": "d038580f",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Califonia Combined Median Rents\n",
-    "columns_list = ['November 2010','December 2010','January 2011',\n",
-    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
-    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
-    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
-    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
-    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
-    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
-    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
-    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
-    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
-    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
-    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']\n",
-    "\n",
-    "for i in columns_list:\n",
-    "\n",
-    "    CA_med_rent = np.median(CA_state_df[i])\n",
-    "\n",
-    "    print(CA_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 121,
-   "id": "a9bb9f80",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "columns_list = ['November 2010','December 2010','January 2011',\n",
-    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
-    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
-    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
-    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
-    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
-    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
-    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
-    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
-    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
-    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
-    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 122,
-   "id": "985e6e41",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# For loop to calculate the median value of each column\n",
-    "for i in columns_list:\n",
-    "\n",
-    "    IL_med_rent = np.median(IL_state_df[i])\n",
-    "\n",
-    "    print(IL_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 123,
-   "id": "14f1fe1e",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#TX\n",
-    "#Finding the median for all TX rent prices per month/year\n",
-    "for i in columns_list:\n",
-    "\n",
-    "    TX_med_rent = np.median(TX_state_df[i])\n",
-    "\n",
-    "    print(TX_med_rent)   "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 124,
-   "id": "d56b6128",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Finding the median for all TX rent prices per month/year\n",
-    "for i in columns_list:\n",
-    "\n",
-    "    TX_med_rent = np.median(TX_state_df[i])\n",
-    "\n",
-    "    print(TX_med_rent)   "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 125,
-   "id": "3ebc4408",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 126,
-   "id": "e30eef41",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York\n",
-    "\n",
-    "for i in columns_list:\n",
-    "\n",
-    "    NY_med_rent = np.median(NY_state_df[i])\n",
-    "\n",
-    "    print(NY_med_rent)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 127,
-   "id": "e99a6a79",
+   "id": "5c133b5c",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -1881,94 +249,1564 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 128,
-   "id": "68772a68",
+   "execution_count": 17,
+   "id": "a8c7930f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Putting CA med rent prices for each month and year into a DF\n",
+    "CA_med_df = pd.DataFrame(CA_med_list, columns_list).T \n",
+    "\n",
+    "CA_med_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "4dc334af",
    "metadata": {},
    "outputs": [],
    "source": [
     "#Finding the median for all TX rent prices per month/year\n",
+    "TX_med_list=[]\n",
     "for i in columns_list:\n",
     "\n",
     "    TX_med_rent = np.median(TX_state_df[i])\n",
     "\n",
-    "    print(TX_med_rent)   \n",
+    "    TX_med_list.append(TX_med_rent)\n",
     "\n",
-    "TX_med_rent_df={TX_med_rent}\n",
-    "print(TX_med_rent_df)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 129,
-   "id": "9f17a079",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#New York Combined Median Rents\n",
-    "NY_nov_2010_med_rent = NY_state_df[\"November 2010\"].median\n",
+    "print(TX_med_list)  \n",
     "\n",
-    "NY_nov_2010_med_rent"
+    "   "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 130,
-   "id": "285c454c",
+   "execution_count": 19,
+   "id": "14b2d3fc",
    "metadata": {},
    "outputs": [],
    "source": [
-    "CA_med_df = pd.Dataframe(CA_med_list, columns = columns_list) \n",
+    "# Putting TX med rent prices for each month and year into a DF\n",
+    "TX_med_df = pd.DataFrame(TX_med_list, columns_list).T \n",
     "\n",
-    "CA_med_df.head()"
+    "TX_med_df.head()"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 131,
-   "id": "428adb70",
+   "execution_count": 20,
+   "id": "fa625467",
    "metadata": {},
    "outputs": [],
    "source": [
-    "CA_med_df = pd.DataFrame(CA_med_list, columns = columns_list) \n",
+    "#New York\n",
+    "NY_med_list=[]\n",
     "\n",
-    "CA_med_df.head()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 132,
-   "id": "8d643599",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "CA_med_df = pd.DataFrame(CA_med_list) \n",
+    "for i in columns_list:\n",
     "\n",
-    "CA_med_df.head()"
+    "    NY_med_rent = np.median(NY_state_df[i])\n",
+    "    NY_med_list.append(NY_med_rent)\n",
+    "\n",
+    "print(NY_med_list)  "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 133,
-   "id": "cbf5fb1e",
+   "execution_count": 21,
+   "id": "62ff47fc",
    "metadata": {},
    "outputs": [],
    "source": [
-    "IL_state_df.columns"
+    "#Putting NY med rent prices for each month and year into a DF\n",
+    "NY_med_df = pd.DataFrame(NY_med_list, columns_list).T \n",
+    "\n",
+    "NY_med_df.head()"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 134,
-   "id": "272d6ee3",
+   "execution_count": 22,
+   "id": "7fe9d274",
    "metadata": {},
    "outputs": [],
    "source": [
+    "#Combined Median rent data for 4 states\n",
+    "TX_CA_df = pd.concat([TX_med_df, CA_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "IL_NY_df = pd.concat([IL_med_df, NY_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "states_med_rent = pd.concat([TX_CA_df, IL_NY_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "#0 = TX, 1 = CA, 2 = IL, 3 = NY\n",
+    "states_med_rent.insert(0, \"State\", [\"TX\", \"CA\", \"IL\", \"NY\"])\n",
+    "\n",
+    "states_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "65d164ed",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Create a table with US Med in it\n",
+    "\n",
+    "ALL_med_rent = pd.concat([states_med_rent, US_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "#ALL_med_rent.reset_index(drop=True)\n",
+    "ALL_med_rent.set_index('State', inplace=True, drop=True)\n",
+    "#ALL_med_rent[ALL_med_rent.index[-1]] = \"US\"\n",
+    "\n",
+    "ALL_med_rent.replace\n",
+    "\n",
+    "ALL_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "566b967b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Starter code for visualizations-- just needs mods\n",
+    "\n",
+    "plt.figure(figsize=(10, 6))\n",
+    "sns.lineplot(x='Year', y='November 2010', data=rent_df, ci=None)\n",
+    "plt.title('Rent Prices Over Time')\n",
+    "plt.xlabel('Year')\n",
+    "plt.ylabel('Rent Price')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "cb8bcb2a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Create a table with US Med in it\n",
+    "\n",
+    "ALL_med_rent = pd.concat([states_med_rent, US_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "#ALL_med_rent.reset_index(drop=True)\n",
+    "#ALL_med_rent.set_index('State', inplace=True, drop=True)\n",
+    "#ALL_med_rent[ALL_med_rent.index[-1]] = \"US\"\n",
+    "ALL_med_rent.insert(0, \"State\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "ALL_med_rent.drop([\"States\"], axis = 1, inplace=True)\n",
+    "ALL_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "091668df",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Create a table with US Med in it\n",
+    "\n",
+    "ALL_med_rent = pd.concat([states_med_rent, US_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "#ALL_med_rent.reset_index(drop=True)\n",
+    "#ALL_med_rent.set_index('State', inplace=True, drop=True)\n",
+    "#ALL_med_rent[ALL_med_rent.index[-1]] = \"US\"\n",
+    "ALL_med_rent.insert(0, \"State\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "ALL_med_rent.drop([\"States\"], axis = 1, inplace=True)\n",
+    "ALL_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "4bc08b91",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Combined Median rent data for 4 states\n",
+    "TX_CA_df = pd.concat([TX_med_df, CA_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "IL_NY_df = pd.concat([IL_med_df, NY_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "states_med_rent = pd.concat([TX_CA_df, IL_NY_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "#0 = TX, 1 = CA, 2 = IL, 3 = NY\n",
+    "states_med_rent.insert(0, \"States\", [\"TX\", \"CA\", \"IL\", \"NY\"])\n",
+    "\n",
+    "states_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "69ce31a6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Create a table with US Med in it\n",
+    "\n",
+    "ALL_med_rent = pd.concat([states_med_rent, US_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "#ALL_med_rent.reset_index(drop=True)\n",
+    "#ALL_med_rent.set_index('State', inplace=True, drop=True)\n",
+    "#ALL_med_rent[ALL_med_rent.index[-1]] = \"US\"\n",
+    "ALL_med_rent.insert(0, \"State\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "ALL_med_rent.drop([\"States\"], axis = 1, inplace=True)\n",
+    "ALL_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "193b6527",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Creating line graph showing all 4 states median rent prices throughout time\n",
+    "\n",
+    "years = [\"2011\", \"2012\", \"2013\", \"2014\", \"2015\", \"2016\",]\n",
+    "\n",
+    "TX_graph = plt.plot(columns_list, ALL_med_rent.loc[0,['November 2010','December 2010','January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']], label=\"Texas\", color=\"blue\") \n",
+    "\n",
+    "CA_graph = plt.plot(columns_list, ALL_med_rent.loc[1,['November 2010','December 2010','January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']], label=\"California\", color=\"orange\") \n",
+    "\n",
+    "IL_graph = plt.plot(columns_list, ALL_med_rent.loc[2,['November 2010','December 2010','January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']], label=\"Illinois\", color=\"green\") \n",
+    "\n",
+    "NY_graph = plt.plot(columns_list, ALL_med_rent.loc[3,['November 2010','December 2010','January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']], label=\"New York\", color=\"red\") \n",
+    "\n",
+    "US_graph = plt.plot(columns_list, ALL_med_rent.loc[4,['November 2010','December 2010','January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016','January 2017']], label=\"US\", color=\"purple\") \n",
+    "\n",
+    "legend_list = [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"]\n",
+    "plt.legend([\"TX\", \"CA\", \"IL\", \"NY\", \"US\"], loc=\"best\")\n",
+    "\n",
+    "plt.title=(\"States vs. Median Rent Cost (2010-2017)\")\n",
+    "plt.xlabel(\"Year\")\n",
+    "plt.ylabel(\"Cost of Rent (USD)\")\n",
+    "#TX_graph.set_xticklabels(columns_list, rotation=45, rotation_mode=\"anchor\", ha=\"right\", wrap=True)\n",
+    "\n",
+    "#plt.plot(rent_df[\"November 2011\"],rent_df[\"State\"])\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "dd6612d4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Creating line graph showing all 4 states median rent prices throughout time\n",
+    "\n",
+    "years = [\"2011\", \"2012\", \"2013\", \"2014\", \"2015\", \"2016\",]\n",
+    "\n",
+    "TX_graph = plt.plot(columns_list, ALL_med_rent.loc[0,['January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016']], label=\"Texas\", color=\"blue\") \n",
+    "\n",
+    "CA_graph = plt.plot(columns_list, ALL_med_rent.loc[1,['January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016']], label=\"California\", color=\"orange\") \n",
+    "\n",
+    "IL_graph = plt.plot(columns_list, ALL_med_rent.loc[2,['January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016']], label=\"Illinois\", color=\"green\") \n",
+    "\n",
+    "NY_graph = plt.plot(columns_list, ALL_med_rent.loc[3,['January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016']], label=\"New York\", color=\"red\") \n",
+    "\n",
+    "US_graph = plt.plot(columns_list, ALL_med_rent.loc[4,['January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016']], label=\"US\", color=\"purple\") \n",
+    "\n",
+    "legend_list = [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"]\n",
+    "plt.legend([\"TX\", \"CA\", \"IL\", \"NY\", \"US\"], loc=\"best\")\n",
+    "\n",
+    "plt.title=(\"States vs. Median Rent Cost (2010-2017)\")\n",
+    "plt.xlabel(\"Year\")\n",
+    "plt.ylabel(\"Cost of Rent (USD)\")\n",
+    "#TX_graph.set_xticklabels(columns_list, rotation=45, rotation_mode=\"anchor\", ha=\"right\", wrap=True)\n",
+    "\n",
+    "#plt.plot(rent_df[\"November 2011\"],rent_df[\"State\"])\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "a968369d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = TX_2011_rents.mean()\n",
+    "print(TX_2011_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "0f2101cc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = TX_2011_rents.median()\n",
+    "print(TX_2011_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "ccdce924",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = median(TX_2011_rents)\n",
+    "print(TX_2011_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "be44f529",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "print(TX_2011_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "f13cd90f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "print(f'The median rent in Texas in 2011 is '(TX_2011_med))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "a0bb816c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2011_med = np.median(TX_2011_rents)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "b6dd0019",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2012_med = np.median(TX_2012_rents)\n",
+    "TX_2013_med = np.median(TX_2013_rents)\n",
+    "TX_2014_med = np.median(TX_2014_rents)\n",
+    "TX_2015_med = np.median(TX_2015_rents)\n",
+    "TX_2016_med = np.median(TX_2016_rents)\n",
+    "\n",
+    "print(TX_2011_med, TX_2012_med, TX_2013_med, TX_2014_med, TX_2015_med, TX_2016_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "6308f579",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2012_med = np.median(TX_2012_rents)\n",
+    "TX_2013_med = np.median(TX_2013_rents)\n",
+    "TX_2014_med = np.median(TX_2014_rents)\n",
+    "TX_2015_med = np.median(TX_2015_rents)\n",
+    "TX_2016_med = np.median(TX_2016_rents)\n",
+    "\n",
+    "print(TX_2011_med, TX_2012_med, TX_2013_med, TX_2014_med, TX_2015_med, TX_2016_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "c1cd14da",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "US_2011_rents = [1218.0, 1219.0, 1220.0, 1220.0, 1218.0, 1217.0, 1214.0, 1213.0, 1210.0, 1207.0, 1206.0, 1205.0]\n",
+    "US_2012_rents = [1204.0, 1205.0, 1207.0, 1206.0, 1205.0, 1205.0, 1205.0, 1206.0, 1208.0, 1210.0, 1215.0, 1215.0]\n",
+    "US_2013_rents = [1215.0, 1216.0, 1217.0, 1217.0, 1218.0, 1221.0, 1224.0, 1225.0, 1228.0, 1231.0, 1235.0, 1236.0]\n",
+    "US_2014_rents = [1236.0, 1234.0, 1232.0, 1229.0, 1227.0, 1223.0, 1226.0, 1232.0, 1245.0, 1253.0, 1259.0, 1263.0]\n",
+    "US_2015_rents = [1269.0, 1272.0, 1276.0, 1280.0, 1284.0, 1289.0, 1295.0, 1299.0, 1298.0, 1294.0, 1293.0, 1292.0]\n",
+    "US_2016_rents = [1294.0, 1298.0, 1303.0, 1308.0, 1312.0, 1313.0, 1311.0, 1306.0, 1305.0, 1305.0, 1307.0, 1308.0]\n",
+    "\n",
+    "US_2011_med = np.median(US_2011_rents)\n",
+    "US_2012_med = np.median(US_2012_rents)\n",
+    "US_2013_med = np.median(US_2013_rents)\n",
+    "US_2014_med = np.median(US_2014_rents)\n",
+    "US_2015_med = np.median(US_2015_rents)\n",
+    "US_2016_med = np.median(US_2016_rents)\n",
+    "\n",
+    "print(US_2011_med, US_2012_med, US_2013_med, US_2014_med, US_2015_med, US_2016_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "452c9cfd",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "CA_2011_rents = [1770.0, 1754.0, 1738.5, 1729.0, 1716.5, 1717.5, 1719.5, 1718.0, 1712.5, 1710.5, 1710.0, 1705.0]\n",
+    "CA_2012_rents = [1702.5, 1695.5, 1696.5, 1697.0, 1700.5, 1713.5, 1710.5, 1709.0, 1702.0, 1704.5, 1700.0, 1701.0]\n",
+    "CA_2013_rents = [1707.5, 1718.5, 1728.0, 1735.0, 1743.0, 1756.5, 1763.0, 1764.5, 1767.0, 1773.5, 1779.5, 1781.5]\n",
+    "CA_2014_rents = [1782.5, 1781.0, 1785.5, 1784.5, 1787.0, 1790.0, 1794.0, 1807.5, 1824.0, 1842.5, 1859.5, 1875.0]\n",
+    "CA_2015_rents = [1885.0, 1899.0, 1907.0, 1921.5, 1935.0, 1946.0, 1957.0, 1969.0, 1977.0, 1982.0, 1995.0, 2004.0]\n",
+    "CA_2016_rents = [2014.5, 2036.5, 2056.0, 2062.5, 2072.0, 2092.0, 2104.0, 2115.0, 2124.5, 2128.5, 2134.0, 2150.5]\n",
+    "\n",
+    "CA_2011_med = np.median(CA_2011_rents)\n",
+    "CA_2012_med = np.median(CA_2012_rents)\n",
+    "CA_2013_med = np.median(CA_2013_rents)\n",
+    "CA_2014_med = np.median(CA_2014_rents)\n",
+    "CA_2015_med = np.median(CA_2015_rents)\n",
+    "CA_2016_med = np.median(CA_2016_rents)\n",
+    "\n",
+    "print(CA_2011_med, CA_2012_med, CA_2013_med, CA_2014_med, CA_2015_med, CA_2016_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "c47cf95e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "IL_2011_rents = [1425.0, 1426.0, 1422.5, 1421.5, 1413.5, 1406.5, 1392.5, 1382.0, 1380.0, 1370.0, 1363.5, 1355.5]\n",
+    "IL_2012_rents = [1349.0, 1344.0, 1341.0, 1344.0, 1344.0, 1347.5, 1347.0, 1346.0, 1351.0, 1359.5, 1371.0, 1370.0]\n",
+    "IL_2013_rents = [1364.5, 1351.5, 1345.5, 1347.0, 1354.0, 1360.0, 1363.0, 1364.5, 1372.5, 1379.0, 1385.5, 1392.0]\n",
+    "IL_2014_rents = [1399.0, 1400.5, 1395.0, 1393.0, 1387.0, 1385.5, 1379.5, 1384.0, 1385.0, 1386.5, 1397.0, 1406.5]\n",
+    "IL_2015_rents = [1411.5, 1408.0, 1416.5, 1414.5, 1413.0, 1413.0, 1414.5, 1414.0, 1411.0, 1403.0, 1398.5, 1396.0]\n",
+    "IL_2016_rents = [1405.5, 1408.0, 1413.0, 1416.5, 1424.5, 1424.0, 1431.0, 1426.5, 1418.0, 1410.0, 1405.0, 1397.0]\n",
+    "\n",
+    "IL_2011_med = np.median(IL_2011_rents)\n",
+    "IL_2012_med = np.median(IL_2012_rents)\n",
+    "IL_2013_med = np.median(IL_2013_rents)\n",
+    "IL_2014_med = np.median(IL_2014_rents)\n",
+    "IL_2015_med = np.median(IL_2015_rents)\n",
+    "IL_2016_med = np.median(IL_2016_rents)\n",
+    "\n",
+    "print(IL_2011_med, IL_2012_med, IL_2013_med, IL_2014_med, IL_2015_med, IL_2016_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "41906c06",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "NY_2011_rents = [1369.5, 1383.5, 1380.5, 1388.0, 1390.5, 1401.0, 1401.0, 1399.0, 1397.0, 1399.0, 1400.5, 1399.0]\n",
+    "NY_2012_rents = [1391.5, 1383.0, 1376.0, 1378.0, 1396.0, 1411.0, 1428.5, 1438.0, 1437.5, 1431.0, 1417.5, 1416.0]\n",
+    "NY_2013_rents = [1419.5, 1432.0, 1434.0, 1431.5, 1434.0, 1418.5, 1384.5, 1368.5, 1366.5, 1379.0, 1398.5, 1395.0]\n",
+    "NY_2014_rents = [1378.5, 1360.0, 1357.5, 1351.0, 1341.0, 1342.0, 1362.5, 1382.0, 1400.5, 1410.0, 1418.5, 1430.0]\n",
+    "NY_2015_rents = [1440.5, 1443.0, 1449.0, 1448.5, 1444.5, 1437.5, 1428.5, 1403.0, 1388.5, 1376.0, 1371.5, 1363.0]\n",
+    "NY_2016_rents = [1368.0, 1365.0, 1374.5, 1380.0, 1385.5, 1390.5, 1401.5, 1399.0, 1394.5, 1392.5, 1389.5, 1386.5]\n",
+    "\n",
+    "NY_2011_med = np.median(NY_2011_rents)\n",
+    "NY_2012_med = np.median(NY_2012_rents)\n",
+    "NY_2013_med = np.median(NY_2013_rents)\n",
+    "NY_2014_med = np.median(NY_2014_rents)\n",
+    "NY_2015_med = np.median(NY_2015_rents)\n",
+    "NY_2016_med = np.median(NY_2016_rents)\n",
+    "\n",
+    "print(NY_2011_med, NY_2012_med, NY_2013_med, NY_2014_med, NY_2015_med, NY_2016_med)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "id": "f9ef9f5e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for TX by year\n",
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2012_med = np.median(TX_2012_rents)\n",
+    "TX_2013_med = np.median(TX_2013_rents)\n",
+    "TX_2014_med = np.median(TX_2014_rents)\n",
+    "TX_2015_med = np.median(TX_2015_rents)\n",
+    "TX_2016_med = np.median(TX_2016_rents)\n",
+    "\n",
+    "print(TX_2011_med, TX_2012_med, TX_2013_med, TX_2014_med, TX_2015_med, TX_2016_med)\n",
+    "\n",
+    "TX_yearly_rent = [1182.5, 1166.5, 1200.5, 1224.5, 1310.5, 1336.0]\n",
+    "\n",
+    "TX_yearly_rent_df = pd.DataFrame(TX_yearly_rent)\n",
+    "TX_yearly_rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "id": "8ce55620",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for TX by year\n",
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2012_med = np.median(TX_2012_rents)\n",
+    "TX_2013_med = np.median(TX_2013_rents)\n",
+    "TX_2014_med = np.median(TX_2014_rents)\n",
+    "TX_2015_med = np.median(TX_2015_rents)\n",
+    "TX_2016_med = np.median(TX_2016_rents)\n",
+    "\n",
+    "print(TX_2011_med, TX_2012_med, TX_2013_med, TX_2014_med, TX_2015_med, TX_2016_med)\n",
+    "\n",
+    "TX_yearly_rent = [1182.5, 1166.5, 1200.5, 1224.5, 1310.5, 1336.0]\n",
+    "\n",
+    "TX_yearly_rent_df = pd.DataFrame(TX_yearly_rent)\n",
+    "TX_yearly_rent_df.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "id": "418b5b97",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for CA by year\n",
+    "CA_2011_rents = [1770.0, 1754.0, 1738.5, 1729.0, 1716.5, 1717.5, 1719.5, 1718.0, 1712.5, 1710.5, 1710.0, 1705.0]\n",
+    "CA_2012_rents = [1702.5, 1695.5, 1696.5, 1697.0, 1700.5, 1713.5, 1710.5, 1709.0, 1702.0, 1704.5, 1700.0, 1701.0]\n",
+    "CA_2013_rents = [1707.5, 1718.5, 1728.0, 1735.0, 1743.0, 1756.5, 1763.0, 1764.5, 1767.0, 1773.5, 1779.5, 1781.5]\n",
+    "CA_2014_rents = [1782.5, 1781.0, 1785.5, 1784.5, 1787.0, 1790.0, 1794.0, 1807.5, 1824.0, 1842.5, 1859.5, 1875.0]\n",
+    "CA_2015_rents = [1885.0, 1899.0, 1907.0, 1921.5, 1935.0, 1946.0, 1957.0, 1969.0, 1977.0, 1982.0, 1995.0, 2004.0]\n",
+    "CA_2016_rents = [2014.5, 2036.5, 2056.0, 2062.5, 2072.0, 2092.0, 2104.0, 2115.0, 2124.5, 2128.5, 2134.0, 2150.5]\n",
+    "\n",
+    "CA_2011_med = np.median(CA_2011_rents)\n",
+    "CA_2012_med = np.median(CA_2012_rents)\n",
+    "CA_2013_med = np.median(CA_2013_rents)\n",
+    "CA_2014_med = np.median(CA_2014_rents)\n",
+    "CA_2015_med = np.median(CA_2015_rents)\n",
+    "CA_2016_med = np.median(CA_2016_rents)\n",
+    "\n",
+    "print(CA_2011_med, CA_2012_med, CA_2013_med, CA_2014_med, CA_2015_med, CA_2016_med)\n",
+    "\n",
+    "CA_yearly_rent = [1717.75, 1701.5, 1759.75, 1792.0, 1951.5, 2098.0]\n",
+    "\n",
+    "CA_yearly_rent_df = pd.DataFrame(CA_yearly_rent)\n",
+    "CA_yearly_rent_df.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "id": "2a493931",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for IL by year\n",
+    "IL_2011_rents = [1425.0, 1426.0, 1422.5, 1421.5, 1413.5, 1406.5, 1392.5, 1382.0, 1380.0, 1370.0, 1363.5, 1355.5]\n",
+    "IL_2012_rents = [1349.0, 1344.0, 1341.0, 1344.0, 1344.0, 1347.5, 1347.0, 1346.0, 1351.0, 1359.5, 1371.0, 1370.0]\n",
+    "IL_2013_rents = [1364.5, 1351.5, 1345.5, 1347.0, 1354.0, 1360.0, 1363.0, 1364.5, 1372.5, 1379.0, 1385.5, 1392.0]\n",
+    "IL_2014_rents = [1399.0, 1400.5, 1395.0, 1393.0, 1387.0, 1385.5, 1379.5, 1384.0, 1385.0, 1386.5, 1397.0, 1406.5]\n",
+    "IL_2015_rents = [1411.5, 1408.0, 1416.5, 1414.5, 1413.0, 1413.0, 1414.5, 1414.0, 1411.0, 1403.0, 1398.5, 1396.0]\n",
+    "IL_2016_rents = [1405.5, 1408.0, 1413.0, 1416.5, 1424.5, 1424.0, 1431.0, 1426.5, 1418.0, 1410.0, 1405.0, 1397.0]\n",
+    "\n",
+    "IL_2011_med = np.median(IL_2011_rents)\n",
+    "IL_2012_med = np.median(IL_2012_rents)\n",
+    "IL_2013_med = np.median(IL_2013_rents)\n",
+    "IL_2014_med = np.median(IL_2014_rents)\n",
+    "IL_2015_med = np.median(IL_2015_rents)\n",
+    "IL_2016_med = np.median(IL_2016_rents)\n",
+    "\n",
+    "print(IL_2011_med, IL_2012_med, IL_2013_med, IL_2014_med, IL_2015_med, IL_2016_med)\n",
+    "\n",
+    "IL_yearly_rent = [1399.5, 1347.25, 1363.75, 1390.0, 1412.25, 1414.75]\n",
+    "\n",
+    "IL_yearly_rent_df = pd.DataFrame(IL_yearly_rent)\n",
+    "IL_yearly_rent_df.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "id": "0d5970be",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for NY by year\n",
+    "NY_2011_rents = [1369.5, 1383.5, 1380.5, 1388.0, 1390.5, 1401.0, 1401.0, 1399.0, 1397.0, 1399.0, 1400.5, 1399.0]\n",
+    "NY_2012_rents = [1391.5, 1383.0, 1376.0, 1378.0, 1396.0, 1411.0, 1428.5, 1438.0, 1437.5, 1431.0, 1417.5, 1416.0]\n",
+    "NY_2013_rents = [1419.5, 1432.0, 1434.0, 1431.5, 1434.0, 1418.5, 1384.5, 1368.5, 1366.5, 1379.0, 1398.5, 1395.0]\n",
+    "NY_2014_rents = [1378.5, 1360.0, 1357.5, 1351.0, 1341.0, 1342.0, 1362.5, 1382.0, 1400.5, 1410.0, 1418.5, 1430.0]\n",
+    "NY_2015_rents = [1440.5, 1443.0, 1449.0, 1448.5, 1444.5, 1437.5, 1428.5, 1403.0, 1388.5, 1376.0, 1371.5, 1363.0]\n",
+    "NY_2016_rents = [1368.0, 1365.0, 1374.5, 1380.0, 1385.5, 1390.5, 1401.5, 1399.0, 1394.5, 1392.5, 1389.5, 1386.5]\n",
+    "\n",
+    "NY_2011_med = np.median(NY_2011_rents)\n",
+    "NY_2012_med = np.median(NY_2012_rents)\n",
+    "NY_2013_med = np.median(NY_2013_rents)\n",
+    "NY_2014_med = np.median(NY_2014_rents)\n",
+    "NY_2015_med = np.median(NY_2015_rents)\n",
+    "NY_2016_med = np.median(NY_2016_rents)\n",
+    "\n",
+    "print(NY_2011_med, NY_2012_med, NY_2013_med, NY_2014_med, NY_2015_med, NY_2016_med)\n",
+    "\n",
+    "Ny_yearly_rent = [1398.0, 1413.5, 1408.5, 1370.5, 1433.0, 1388.0]\n",
+    "\n",
+    "NY_yearly_rent_df = pd.DataFrame(NY_yearly_rent)\n",
+    "NY_yearly_rent_df.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "id": "c8dc307a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for NY by year\n",
+    "NY_2011_rents = [1369.5, 1383.5, 1380.5, 1388.0, 1390.5, 1401.0, 1401.0, 1399.0, 1397.0, 1399.0, 1400.5, 1399.0]\n",
+    "NY_2012_rents = [1391.5, 1383.0, 1376.0, 1378.0, 1396.0, 1411.0, 1428.5, 1438.0, 1437.5, 1431.0, 1417.5, 1416.0]\n",
+    "NY_2013_rents = [1419.5, 1432.0, 1434.0, 1431.5, 1434.0, 1418.5, 1384.5, 1368.5, 1366.5, 1379.0, 1398.5, 1395.0]\n",
+    "NY_2014_rents = [1378.5, 1360.0, 1357.5, 1351.0, 1341.0, 1342.0, 1362.5, 1382.0, 1400.5, 1410.0, 1418.5, 1430.0]\n",
+    "NY_2015_rents = [1440.5, 1443.0, 1449.0, 1448.5, 1444.5, 1437.5, 1428.5, 1403.0, 1388.5, 1376.0, 1371.5, 1363.0]\n",
+    "NY_2016_rents = [1368.0, 1365.0, 1374.5, 1380.0, 1385.5, 1390.5, 1401.5, 1399.0, 1394.5, 1392.5, 1389.5, 1386.5]\n",
+    "\n",
+    "NY_2011_med = np.median(NY_2011_rents)\n",
+    "NY_2012_med = np.median(NY_2012_rents)\n",
+    "NY_2013_med = np.median(NY_2013_rents)\n",
+    "NY_2014_med = np.median(NY_2014_rents)\n",
+    "NY_2015_med = np.median(NY_2015_rents)\n",
+    "NY_2016_med = np.median(NY_2016_rents)\n",
+    "\n",
+    "print(NY_2011_med, NY_2012_med, NY_2013_med, NY_2014_med, NY_2015_med, NY_2016_med)\n",
+    "\n",
+    "NY_yearly_rent = [1398.0, 1413.5, 1408.5, 1370.5, 1433.0, 1388.0]\n",
+    "\n",
+    "NY_yearly_rent_df = pd.DataFrame(NY_yearly_rent)\n",
+    "NY_yearly_rent_df.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
+   "id": "590e7524",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for US by year\n",
+    "US_2011_rents = [1218.0, 1219.0, 1220.0, 1220.0, 1218.0, 1217.0, 1214.0, 1213.0, 1210.0, 1207.0, 1206.0, 1205.0]\n",
+    "US_2012_rents = [1204.0, 1205.0, 1207.0, 1206.0, 1205.0, 1205.0, 1205.0, 1206.0, 1208.0, 1210.0, 1215.0, 1215.0]\n",
+    "US_2013_rents = [1215.0, 1216.0, 1217.0, 1217.0, 1218.0, 1221.0, 1224.0, 1225.0, 1228.0, 1231.0, 1235.0, 1236.0]\n",
+    "US_2014_rents = [1236.0, 1234.0, 1232.0, 1229.0, 1227.0, 1223.0, 1226.0, 1232.0, 1245.0, 1253.0, 1259.0, 1263.0]\n",
+    "US_2015_rents = [1269.0, 1272.0, 1276.0, 1280.0, 1284.0, 1289.0, 1295.0, 1299.0, 1298.0, 1294.0, 1293.0, 1292.0]\n",
+    "US_2016_rents = [1294.0, 1298.0, 1303.0, 1308.0, 1312.0, 1313.0, 1311.0, 1306.0, 1305.0, 1305.0, 1307.0, 1308.0]\n",
+    "\n",
+    "US_2011_med = np.median(US_2011_rents)\n",
+    "US_2012_med = np.median(US_2012_rents)\n",
+    "US_2013_med = np.median(US_2013_rents)\n",
+    "US_2014_med = np.median(US_2014_rents)\n",
+    "US_2015_med = np.median(US_2015_rents)\n",
+    "US_2016_med = np.median(US_2016_rents)\n",
+    "\n",
+    "print(US_2011_med, US_2012_med, US_2013_med, US_2014_med, US_2015_med, US_2016_med)\n",
+    "\n",
+    "US_yearly_rent = [1215.5, 1206.0, 1222.5, 1233.0, 1290.5, 1306.5]\n",
+    "\n",
+    "US_yearly_rent_df = pd.DataFrame(US_yearly_rent)\n",
+    "US_yearly_rent_df.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "id": "0c61d671",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for TX by year and make df\n",
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2012_med = np.median(TX_2012_rents)\n",
+    "TX_2013_med = np.median(TX_2013_rents)\n",
+    "TX_2014_med = np.median(TX_2014_rents)\n",
+    "TX_2015_med = np.median(TX_2015_rents)\n",
+    "TX_2016_med = np.median(TX_2016_rents)\n",
+    "\n",
+    "print(TX_2011_med, TX_2012_med, TX_2013_med, TX_2014_med, TX_2015_med, TX_2016_med)\n",
+    "\n",
+    "TX_yearly_rent = [1182.5, 1166.5, 1200.5, 1224.5, 1310.5, 1336.0]\n",
+    "\n",
+    "TX_yearly_rent_df = pd.DataFrame(TX_yearly_rent)\n",
+    "TX_yearly_rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "id": "8ec17099",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for TX by year and make df\n",
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2012_med = np.median(TX_2012_rents)\n",
+    "TX_2013_med = np.median(TX_2013_rents)\n",
+    "TX_2014_med = np.median(TX_2014_rents)\n",
+    "TX_2015_med = np.median(TX_2015_rents)\n",
+    "TX_2016_med = np.median(TX_2016_rents)\n",
+    "\n",
+    "print(TX_2011_med, TX_2012_med, TX_2013_med, TX_2014_med, TX_2015_med, TX_2016_med)\n",
+    "\n",
+    "TX_yearly_rent = [1182.5, 1166.5, 1200.5, 1224.5, 1310.5, 1336.0]\n",
+    "\n",
+    "TX_yearly_rent_df = pd.DataFrame(TX_yearly_rent)\n",
+    "TX_yearly_rent_df.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "id": "12ed9434",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#combine yearly rents in to one df\n",
+    "TX_CA_yearly_rent_df = pd.concat([TX_yearly_rent_df, CA_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "IL_NY_yearly_rent_df = pd.concat([IL_yearly_rent_df, NY_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "states_yearly_rent_df = pd.concat([TX_CA_yearly_rent_df, IL_NY_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "ALL_yearly_rent_df = pd.concat([states_yearly_rent_df, US_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "#0 = TX, 1 = CA, 2 = IL, 3 = NY\n",
+    "ALL_yearly_rent_df.insert(0, \"States\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "states_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "id": "0dc1c830",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Dependencies and Set Up\n",
     "import pandas as pd\n",
     "import numpy as np\n",
     "import matplotlib.pyplot as plt\n",
-    "import pandas as pd\n",
     "import scipy.stats as st\n",
-    "from scipy.stats import linregress"
+    "from scipy.stats import linregress\n",
+    "import seaborn as sns  # For heatmap visualization"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "id": "4a9b7a4d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%notebook widget"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "id": "a31b06a5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Creating a path to the file making it into a dataframe\n",
+    "rent_file = pd.read_csv(\"Raw_Price_Data//price.csv\")\n",
+    "\n",
+    "rent_df = pd.DataFrame(rent_file)\n",
+    "\n",
+    "rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 56,
+   "id": "cee40602",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Identifying what columns are missing data\n",
+    "clean_rent_df = rent_df.dropna(how = 'any')\n",
+    "\n",
+    "clean_rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "id": "e33b10a9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Extracting states from data (CA, IL, NY, TX)\n",
+    "four_states = [\"NY\", \"CA\", \"IL\", \"TX\"]\n",
+    "\n",
+    "four_states_df = rent_df[rent_df['State'].isin(four_states)]\n",
+    "\n",
+    "four_states_df.head(20)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "id": "fe5ddeb2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Droping all NaN values\n",
+    "rent_df.dropna(inplace = True)\n",
+    "\n",
+    "#Display the DataFrame\n",
+    "rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "id": "902dc34b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#New York Data Frame\n",
+    "NY_state = [\"NY\"]\n",
+    "\n",
+    "NY_state_df = rent_df[rent_df['State'].isin(NY_state)]\n",
+    "\n",
+    "NY_state_df.head(20)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "id": "0bf878d6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#California Data Frame\n",
+    "CA_state = [\"CA\"]\n",
+    "\n",
+    "CA_state_df = rent_df[rent_df['State'].isin(CA_state)]\n",
+    "\n",
+    "CA_state_df.head(20)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "id": "74a04066",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Illinois Data Frame\n",
+    "IL_state = [\"IL\"]\n",
+    "\n",
+    "IL_state_df = rent_df[rent_df['State'].isin(IL_state)]\n",
+    "\n",
+    "IL_state_df.head(20)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "id": "e831c21a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Texas Data Frame\n",
+    "TX_state = [\"TX\"]\n",
+    "\n",
+    "TX_state_df = rent_df[rent_df['State'].isin(TX_state)]\n",
+    "\n",
+    "TX_state_df.head(20)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "id": "a2387be6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Making all of the columsn into a list\n",
+    "columns_list = ['January 2011',\n",
+    "'February 2011','March 2011','April 2011','May 2011','June 2011','July 2011',\n",
+    "'August 2011','September 2011','October 2011','November 2011','December 2011',\n",
+    "'January 2012','February 2012','March 2012','April 2012','May 2012','June 2012',\n",
+    "'July 2012','August 2012','September 2012','October 2012','November 2012','December 2012',\n",
+    "'January 2013','February 2013','March 2013','April 2013','May 2013','June 2013','July 2013',\n",
+    "'August 2013','September 2013','October 2013','November 2013','December 2013','January 2014',\n",
+    "'February 2014','March 2014','April 2014','May 2014','June 2014','July 2014','August 2014',\n",
+    "'September 2014','October 2014','November 2014','December 2014','January 2015','February 2015',\n",
+    "'March 2015','April 2015','May 2015','June 2015','July 2015','August 2015','September 2015','October 2015',\n",
+    "'November 2015','December 2015','January 2016','February 2016','March 2016','April 2016','May 2016',\n",
+    "'June 2016','July 2016','August 2016','September 2016','October 2016','November 2016','December 2016']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "id": "18415b01",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# US median rent prices\n",
+    "US_med_list = []\n",
+    "\n",
+    "for i in columns_list:\n",
+    "\n",
+    "    US_med_rent = np.median(clean_rent_df[i])\n",
+    "\n",
+    "    US_med_list.append(US_med_rent)\n",
+    "\n",
+    "print(US_med_list)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "id": "a74eac6f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "US_med_df = pd.DataFrame(US_med_list, columns_list).T \n",
+    "\n",
+    "US_med_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 66,
+   "id": "c746727e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# For loop to calculate the median value of each column in IL\n",
+    "IL_med_list = []\n",
+    "\n",
+    "for i in columns_list:\n",
+    "\n",
+    "    IL_med_rent = np.median(IL_state_df[i])\n",
+    "\n",
+    "    IL_med_list.append(IL_med_rent)\n",
+    "\n",
+    "print(IL_med_list)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 67,
+   "id": "a3c0f1c1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Putting IL med rent prices for each month and year into a DF\n",
+    "IL_med_df = pd.DataFrame(IL_med_list, columns_list).T \n",
+    "\n",
+    "IL_med_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "id": "9b710626",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Califonia Combined Median Rents\n",
+    "CA_med_list = []\n",
+    "\n",
+    "for i in columns_list:\n",
+    "\n",
+    "    CA_med_rent = np.median(CA_state_df[i])\n",
+    "\n",
+    "    CA_med_list.append(CA_med_rent)\n",
+    "\n",
+    "print(CA_med_list)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "id": "5a20f1dc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Putting CA med rent prices for each month and year into a DF\n",
+    "CA_med_df = pd.DataFrame(CA_med_list, columns_list).T \n",
+    "\n",
+    "CA_med_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 70,
+   "id": "42a00e71",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Finding the median for all TX rent prices per month/year\n",
+    "TX_med_list=[]\n",
+    "for i in columns_list:\n",
+    "\n",
+    "    TX_med_rent = np.median(TX_state_df[i])\n",
+    "\n",
+    "    TX_med_list.append(TX_med_rent)\n",
+    "\n",
+    "print(TX_med_list)  \n",
+    "\n",
+    "   "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "id": "d800f3e6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Putting TX med rent prices for each month and year into a DF\n",
+    "TX_med_df = pd.DataFrame(TX_med_list, columns_list).T \n",
+    "\n",
+    "TX_med_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 72,
+   "id": "11c31dfe",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#New York\n",
+    "NY_med_list=[]\n",
+    "\n",
+    "for i in columns_list:\n",
+    "\n",
+    "    NY_med_rent = np.median(NY_state_df[i])\n",
+    "    NY_med_list.append(NY_med_rent)\n",
+    "\n",
+    "print(NY_med_list)  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 73,
+   "id": "9bdf552a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Putting NY med rent prices for each month and year into a DF\n",
+    "NY_med_df = pd.DataFrame(NY_med_list, columns_list).T \n",
+    "\n",
+    "NY_med_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 74,
+   "id": "404f5ca0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Combined Median rent data for 4 states\n",
+    "TX_CA_df = pd.concat([TX_med_df, CA_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "IL_NY_df = pd.concat([IL_med_df, NY_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "states_med_rent = pd.concat([TX_CA_df, IL_NY_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "#0 = TX, 1 = CA, 2 = IL, 3 = NY\n",
+    "states_med_rent.insert(0, \"States\", [\"TX\", \"CA\", \"IL\", \"NY\"])\n",
+    "\n",
+    "states_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "id": "f55a604f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Create a table with US Med in it\n",
+    "\n",
+    "ALL_med_rent = pd.concat([states_med_rent, US_med_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "#ALL_med_rent.reset_index(drop=True)\n",
+    "#ALL_med_rent.set_index('State', inplace=True, drop=True)\n",
+    "#ALL_med_rent[ALL_med_rent.index[-1]] = \"US\"\n",
+    "ALL_med_rent.insert(0, \"State\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "ALL_med_rent.drop([\"States\"], axis = 1, inplace=True)\n",
+    "ALL_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 76,
+   "id": "316078d1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for TX by year and make df\n",
+    "TX_2011_rents = [1194.0, 1189.0, 1186.0, 1183.0, 1182.0, 1189.0, 1184.0, 1179.0, 1181.0, 1174.0, 1173.0, 1167.0]\n",
+    "TX_2012_rents = [1164.0, 1162.0, 1165.0, 1159.0, 1155.0, 1158.0, 1168.0, 1172.0, 1177.0, 1179.0, 1173.0, 1171.0]\n",
+    "TX_2013_rents = [1175.0, 1174.0, 1181.0, 1196.0, 1202.0, 1200.0, 1197.0, 1201.0, 1205.0, 1208.0, 1212.0, 1221.0]\n",
+    "TX_2014_rents = [1224.0, 1224.0, 1222.0, 1225.0, 1221.0, 1218.0, 1221.0, 1234.0, 1245.0, 1256.0, 1272.0, 1275.0]\n",
+    "TX_2015_rents = [1282.0, 1287.0, 1289.0, 1297.0, 1300.0, 1309.0, 1313.0, 1319.0, 1323.0, 1325.0, 1320.0, 1312.0]\n",
+    "TX_2016_rents = [1313.0, 1319.0, 1326.0, 1325.0, 1338.0, 1346.0, 1350.0, 1343.0, 1340.0, 1335.0, 1335.0, 1337.0]\n",
+    "\n",
+    "\n",
+    "TX_2011_med = np.median(TX_2011_rents)\n",
+    "TX_2012_med = np.median(TX_2012_rents)\n",
+    "TX_2013_med = np.median(TX_2013_rents)\n",
+    "TX_2014_med = np.median(TX_2014_rents)\n",
+    "TX_2015_med = np.median(TX_2015_rents)\n",
+    "TX_2016_med = np.median(TX_2016_rents)\n",
+    "\n",
+    "print(TX_2011_med, TX_2012_med, TX_2013_med, TX_2014_med, TX_2015_med, TX_2016_med)\n",
+    "\n",
+    "TX_yearly_rent = [1182.5, 1166.5, 1200.5, 1224.5, 1310.5, 1336.0]\n",
+    "\n",
+    "TX_yearly_rent_df = pd.DataFrame(TX_yearly_rent)\n",
+    "TX_yearly_rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "id": "4a1ee75c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for CA by year and make df\n",
+    "CA_2011_rents = [1770.0, 1754.0, 1738.5, 1729.0, 1716.5, 1717.5, 1719.5, 1718.0, 1712.5, 1710.5, 1710.0, 1705.0]\n",
+    "CA_2012_rents = [1702.5, 1695.5, 1696.5, 1697.0, 1700.5, 1713.5, 1710.5, 1709.0, 1702.0, 1704.5, 1700.0, 1701.0]\n",
+    "CA_2013_rents = [1707.5, 1718.5, 1728.0, 1735.0, 1743.0, 1756.5, 1763.0, 1764.5, 1767.0, 1773.5, 1779.5, 1781.5]\n",
+    "CA_2014_rents = [1782.5, 1781.0, 1785.5, 1784.5, 1787.0, 1790.0, 1794.0, 1807.5, 1824.0, 1842.5, 1859.5, 1875.0]\n",
+    "CA_2015_rents = [1885.0, 1899.0, 1907.0, 1921.5, 1935.0, 1946.0, 1957.0, 1969.0, 1977.0, 1982.0, 1995.0, 2004.0]\n",
+    "CA_2016_rents = [2014.5, 2036.5, 2056.0, 2062.5, 2072.0, 2092.0, 2104.0, 2115.0, 2124.5, 2128.5, 2134.0, 2150.5]\n",
+    "\n",
+    "CA_2011_med = np.median(CA_2011_rents)\n",
+    "CA_2012_med = np.median(CA_2012_rents)\n",
+    "CA_2013_med = np.median(CA_2013_rents)\n",
+    "CA_2014_med = np.median(CA_2014_rents)\n",
+    "CA_2015_med = np.median(CA_2015_rents)\n",
+    "CA_2016_med = np.median(CA_2016_rents)\n",
+    "\n",
+    "print(CA_2011_med, CA_2012_med, CA_2013_med, CA_2014_med, CA_2015_med, CA_2016_med)\n",
+    "\n",
+    "CA_yearly_rent = [1717.75, 1701.5, 1759.75, 1792.0, 1951.5, 2098.0]\n",
+    "\n",
+    "CA_yearly_rent_df = pd.DataFrame(CA_yearly_rent)\n",
+    "CA_yearly_rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "id": "cb0cd0f3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for IL by year and make df\n",
+    "IL_2011_rents = [1425.0, 1426.0, 1422.5, 1421.5, 1413.5, 1406.5, 1392.5, 1382.0, 1380.0, 1370.0, 1363.5, 1355.5]\n",
+    "IL_2012_rents = [1349.0, 1344.0, 1341.0, 1344.0, 1344.0, 1347.5, 1347.0, 1346.0, 1351.0, 1359.5, 1371.0, 1370.0]\n",
+    "IL_2013_rents = [1364.5, 1351.5, 1345.5, 1347.0, 1354.0, 1360.0, 1363.0, 1364.5, 1372.5, 1379.0, 1385.5, 1392.0]\n",
+    "IL_2014_rents = [1399.0, 1400.5, 1395.0, 1393.0, 1387.0, 1385.5, 1379.5, 1384.0, 1385.0, 1386.5, 1397.0, 1406.5]\n",
+    "IL_2015_rents = [1411.5, 1408.0, 1416.5, 1414.5, 1413.0, 1413.0, 1414.5, 1414.0, 1411.0, 1403.0, 1398.5, 1396.0]\n",
+    "IL_2016_rents = [1405.5, 1408.0, 1413.0, 1416.5, 1424.5, 1424.0, 1431.0, 1426.5, 1418.0, 1410.0, 1405.0, 1397.0]\n",
+    "\n",
+    "IL_2011_med = np.median(IL_2011_rents)\n",
+    "IL_2012_med = np.median(IL_2012_rents)\n",
+    "IL_2013_med = np.median(IL_2013_rents)\n",
+    "IL_2014_med = np.median(IL_2014_rents)\n",
+    "IL_2015_med = np.median(IL_2015_rents)\n",
+    "IL_2016_med = np.median(IL_2016_rents)\n",
+    "\n",
+    "print(IL_2011_med, IL_2012_med, IL_2013_med, IL_2014_med, IL_2015_med, IL_2016_med)\n",
+    "\n",
+    "IL_yearly_rent = [1399.5, 1347.25, 1363.75, 1390.0, 1412.25, 1414.75]\n",
+    "\n",
+    "IL_yearly_rent_df = pd.DataFrame(IL_yearly_rent)\n",
+    "IL_yearly_rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 79,
+   "id": "c78c69cd",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for NY by year and make df\n",
+    "NY_2011_rents = [1369.5, 1383.5, 1380.5, 1388.0, 1390.5, 1401.0, 1401.0, 1399.0, 1397.0, 1399.0, 1400.5, 1399.0]\n",
+    "NY_2012_rents = [1391.5, 1383.0, 1376.0, 1378.0, 1396.0, 1411.0, 1428.5, 1438.0, 1437.5, 1431.0, 1417.5, 1416.0]\n",
+    "NY_2013_rents = [1419.5, 1432.0, 1434.0, 1431.5, 1434.0, 1418.5, 1384.5, 1368.5, 1366.5, 1379.0, 1398.5, 1395.0]\n",
+    "NY_2014_rents = [1378.5, 1360.0, 1357.5, 1351.0, 1341.0, 1342.0, 1362.5, 1382.0, 1400.5, 1410.0, 1418.5, 1430.0]\n",
+    "NY_2015_rents = [1440.5, 1443.0, 1449.0, 1448.5, 1444.5, 1437.5, 1428.5, 1403.0, 1388.5, 1376.0, 1371.5, 1363.0]\n",
+    "NY_2016_rents = [1368.0, 1365.0, 1374.5, 1380.0, 1385.5, 1390.5, 1401.5, 1399.0, 1394.5, 1392.5, 1389.5, 1386.5]\n",
+    "\n",
+    "NY_2011_med = np.median(NY_2011_rents)\n",
+    "NY_2012_med = np.median(NY_2012_rents)\n",
+    "NY_2013_med = np.median(NY_2013_rents)\n",
+    "NY_2014_med = np.median(NY_2014_rents)\n",
+    "NY_2015_med = np.median(NY_2015_rents)\n",
+    "NY_2016_med = np.median(NY_2016_rents)\n",
+    "\n",
+    "print(NY_2011_med, NY_2012_med, NY_2013_med, NY_2014_med, NY_2015_med, NY_2016_med)\n",
+    "\n",
+    "NY_yearly_rent = [1398.0, 1413.5, 1408.5, 1370.5, 1433.0, 1388.0]\n",
+    "\n",
+    "NY_yearly_rent_df = pd.DataFrame(NY_yearly_rent)\n",
+    "NY_yearly_rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 80,
+   "id": "73fdc8ae",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Get median rent for US by year and make df\n",
+    "US_2011_rents = [1218.0, 1219.0, 1220.0, 1220.0, 1218.0, 1217.0, 1214.0, 1213.0, 1210.0, 1207.0, 1206.0, 1205.0]\n",
+    "US_2012_rents = [1204.0, 1205.0, 1207.0, 1206.0, 1205.0, 1205.0, 1205.0, 1206.0, 1208.0, 1210.0, 1215.0, 1215.0]\n",
+    "US_2013_rents = [1215.0, 1216.0, 1217.0, 1217.0, 1218.0, 1221.0, 1224.0, 1225.0, 1228.0, 1231.0, 1235.0, 1236.0]\n",
+    "US_2014_rents = [1236.0, 1234.0, 1232.0, 1229.0, 1227.0, 1223.0, 1226.0, 1232.0, 1245.0, 1253.0, 1259.0, 1263.0]\n",
+    "US_2015_rents = [1269.0, 1272.0, 1276.0, 1280.0, 1284.0, 1289.0, 1295.0, 1299.0, 1298.0, 1294.0, 1293.0, 1292.0]\n",
+    "US_2016_rents = [1294.0, 1298.0, 1303.0, 1308.0, 1312.0, 1313.0, 1311.0, 1306.0, 1305.0, 1305.0, 1307.0, 1308.0]\n",
+    "\n",
+    "US_2011_med = np.median(US_2011_rents)\n",
+    "US_2012_med = np.median(US_2012_rents)\n",
+    "US_2013_med = np.median(US_2013_rents)\n",
+    "US_2014_med = np.median(US_2014_rents)\n",
+    "US_2015_med = np.median(US_2015_rents)\n",
+    "US_2016_med = np.median(US_2016_rents)\n",
+    "\n",
+    "print(US_2011_med, US_2012_med, US_2013_med, US_2014_med, US_2015_med, US_2016_med)\n",
+    "\n",
+    "US_yearly_rent = [1215.5, 1206.0, 1222.5, 1233.0, 1290.5, 1306.5]\n",
+    "\n",
+    "US_yearly_rent_df = pd.DataFrame(US_yearly_rent)\n",
+    "US_yearly_rent_df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 81,
+   "id": "6c74ef83",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#combine yearly rents in to one df\n",
+    "TX_CA_yearly_rent_df = pd.concat([TX_yearly_rent_df, CA_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "IL_NY_yearly_rent_df = pd.concat([IL_yearly_rent_df, NY_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "states_yearly_rent_df = pd.concat([TX_CA_yearly_rent_df, IL_NY_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "ALL_yearly_rent_df = pd.concat([states_yearly_rent_df, US_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "#0 = TX, 1 = CA, 2 = IL, 3 = NY\n",
+    "ALL_yearly_rent_df.insert(0, \"States\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "states_med_rent.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 82,
+   "id": "9f3d4197",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#combine yearly rents in to one df\n",
+    "TX_CA_yearly_rent_df = pd.concat([TX_yearly_rent_df, CA_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "IL_NY_yearly_rent_df = pd.concat([IL_yearly_rent_df, NY_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "states_yearly_rent_df = pd.concat([TX_CA_yearly_rent_df, IL_NY_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "ALL_yearly_rent_df = pd.concat([states_yearly_rent_df, US_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "#0 = TX, 1 = CA, 2 = IL, 3 = NY\n",
+    "ALL_yearly_rent_df.insert(0, \"States\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "states_med_rent.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 83,
+   "id": "5f60d992",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#combine yearly rents in to one df\n",
+    "TX_CA_yearly_rent_df = pd.concat([TX_yearly_rent_df, CA_yearly_rent_df], axis=0)#, ignore_index=True)\n",
+    "\n",
+    "IL_NY_yearly_rent_df = pd.concat([IL_yearly_rent_df, NY_yearly_rent_df], axis=0)#, ignore_index=True)\n",
+    "\n",
+    "states_yearly_rent_df = pd.concat([TX_CA_yearly_rent_df, IL_NY_yearly_rent_df])#, axis=0, ignore_index=True)\n",
+    "\n",
+    "ALL_yearly_rent_df = pd.concat([states_yearly_rent_df, US_yearly_rent_df], axis=0)#, ignore_index=True)\n",
+    "#0 = TX, 1 = CA, 2 = IL, 3 = NY\n",
+    "ALL_yearly_rent_df.insert(0, \"States\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "states_med_rent.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 84,
+   "id": "e17ee5a8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#combine yearly rents in to one df\n",
+    "TX_CA_yearly_rent_df = pd.concat([TX_yearly_rent_df, CA_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "IL_NY_yearly_rent_df = pd.concat([IL_yearly_rent_df, NY_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "states_yearly_rent_df = pd.concat([TX_CA_yearly_rent_df, IL_NY_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "\n",
+    "ALL_yearly_rent_df = pd.concat([states_yearly_rent_df, US_yearly_rent_df], axis=0, ignore_index=True)\n",
+    "#0 = TX, 1 = CA, 2 = IL, 3 = NY\n",
+    "ALL_yearly_rent_df.insert(0, \"States\", [\"TX\", \"CA\", \"IL\", \"NY\", \"US\"])\n",
+    "\n",
+    "ALL_yearly_rent_df.head().T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 85,
+   "id": "0fa6a187",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Dependencies and Set Up\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import scipy.stats as st\n",
+    "from scipy.stats import linregress\n",
+    "import seaborn as sns  # For heatmap visualization"
    ]
   }
  ],
