@@ -25,7 +25,7 @@ Our analysis culminates in comprehensive insights:
 2. **Greatest Rent Change:** California boasted the most substantial rise in rent prices between 2011 and 2016.
 ## Additional Insights:
 Certainly, here are a few more points you could consider adding to the conclusion section of your README:
-## Additional Analysis and Conclusions
+## Additional Analysis and Conclusions:
 In addition to the key findings mentioned above, our exploration of the US rental market yields further insights:
 ### Rent Stability and Competitive Market:
 The absence of outliers in the data underscores the remarkable stability of the rental market. The lack of extreme values suggests that competition among states and regions keeps rent prices relatively consistent. This observation aligns with the notion that market forces and demand-supply dynamics play a significant role in shaping rental costs.
