@@ -43,7 +43,7 @@ We extend our gratitude to our team members for their contributions throughout t
 This project has been an enriching experience, enabling us to merge theoretical concepts with practical applications, and we are excited to continue our journey in the realm of data analytics.
 We invite you to explore our analysis further, as we unravel the intricacies of the US rental market and offer insights into trends, disparities, and factors influencing rent prices. 
 
-##Reference 
+## Reference 
 
 Landup, D. (n.d.) Change Tick Frequency in Matplotlib. StackAbuse. https://stackabuse.com/change-tick-frequency-in-matplotlib/
 
