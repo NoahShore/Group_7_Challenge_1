@@ -50,3 +50,10 @@ Landup, D. (n.d.) Change Tick Frequency in Matplotlib. StackAbuse. https://stack
 StackOverflow. (2021, May 10). "Unicode Error "unicodeescape" codec can't decode bytes... Cannot open text files in Python 3 [duplicate]. StackOverflow. https://stackoverflow.com/questions/1347791/unicode-error-unicodeescape-codec-cant-decode-bytes-cannot-open-text-file
 
 Zillow. (2017, March 3). Zillow Rent Index, 2010-Present. Kaggle. https://www.kaggle.com/datasets/zillow/rent-index 
+
+### Grade:
+
+![Screenshot 2023-10-15 220048](https://github.com/leeangel0428/Excel_analysis/assets/137225965/98912a82-c22a-4470-a5d0-0aa71f9b9025)
+
+![Screenshot 2023-10-15 220058](https://github.com/leeangel0428/Excel_analysis/assets/137225965/f0b7baa9-9cf2-472d-9d03-29123fe4734a)
+
