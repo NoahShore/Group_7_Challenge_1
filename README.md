@@ -51,9 +51,5 @@ StackOverflow. (2021, May 10). "Unicode Error "unicodeescape" codec can't decode
 
 Zillow. (2017, March 3). Zillow Rent Index, 2010-Present. Kaggle. https://www.kaggle.com/datasets/zillow/rent-index 
 
-### Grade:
 
-![Screenshot 2023-10-15 220048](https://github.com/leeangel0428/Excel_analysis/assets/137225965/98912a82-c22a-4470-a5d0-0aa71f9b9025)
-
-![Screenshot 2023-10-15 220058](https://github.com/leeangel0428/Excel_analysis/assets/137225965/f0b7baa9-9cf2-472d-9d03-29123fe4734a)
 
